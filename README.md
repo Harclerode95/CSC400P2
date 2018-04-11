@@ -38,3 +38,8 @@ You need not comment every line; however, you should use in-line comments for an
 Functions and variables should have meaningful names, but single letter variables (like i) for loop counters and local temporaries are OK.
 Minimize the number of global variables.
 Do not use gotos - negative points will be awarded for use of goto.  :-)
+
+
+**Scoring rubric:
+
+http://students.calu.edu/calupa/chen/csc400/pa2/rubricpa2.html
