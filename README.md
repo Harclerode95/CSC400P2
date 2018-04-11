@@ -46,3 +46,10 @@ Do not use gotos - negative points will be awarded for use of goto.  :-)
 **Scoring rubric:
 
 http://students.calu.edu/calupa/chen/csc400/pa2/rubricpa2.html
+
+
+FIFO: replace page that has been in the system the longest
+LRU:  replace the page that has spent the longest time in mem w/0 being referenced
+LFU:  replace the least intensively referenced page
+
+**LRU & LFU use intuition
