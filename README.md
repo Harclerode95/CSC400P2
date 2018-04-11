@@ -3,6 +3,9 @@ Programming Assignment 2 - CSC400 Operating Systems
 
 Notes:
 
+Project Description: Start from this given sample that implements the random replacement strategy, implement the other three strategies First In First Out (FIFO), Least Recently Used (LRU), and Least Frequently Used (LFU) to simulate the OS page replacements using each strategy for a particular page-reference sequence (It is OK to have three separate source files, each for one strategy). Your assignments:
+
+
 1) Read page-reference from a given file (Each line of the file contains a page reference sequence, page ID is A-Z). So if your compiled program is named replacement, one way to run your program is replacement   pagereference.txt and your program will read the page-reference sequences from the file reference sequences, which contains three patterns: random, locality, and sequential with loop. Each line is a pattern, consisting of 1000 page references. 
 
 Recommendation: Please use the small sequence for testing your program. When you think your program is correct, run the final sequences for submission. 
