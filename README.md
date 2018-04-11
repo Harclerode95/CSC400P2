@@ -21,3 +21,20 @@ To run the sample random.c, type gcc random.c, and then ./a.out .
 
 
 **For testing: ** http://students.calu.edu/calupa/chen/csc400/pa2/testing.html
+
+
+
+**Programming Guidelines:
+
+The following are some points to keep in mind for this and other projects for this course (if not for the rest of your coding career).
+
+All source code files must have a "program header comment" including your name, email address, course number and name, program title, date, compilation instructions and an overall description of the file.
+All code submitted as your work must be originally written by you, except that you may use and modify any sample given in class or from the text as long as you include proper credit for the source.
+Your program should be well modularized into small (<50 lines), well-defined functions.
+main() should be like the executive of a company - it should only call other functions to do the work instead of doing the work itself.
+Each function should be preceded by a comment describing what it does and any special I/O parameter considerations (side effects, etc).
+Return values from all system & library calls should be checked and have suitable error handling. Neglecting to do this is an open invitation for trouble, which I typically find.
+You need not comment every line; however, you should use in-line comments for any complicated code or unusual conditions and non-obvious variable effects.
+Functions and variables should have meaningful names, but single letter variables (like i) for loop counters and local temporaries are OK.
+Minimize the number of global variables.
+Do not use gotos - negative points will be awarded for use of goto.  :-)
