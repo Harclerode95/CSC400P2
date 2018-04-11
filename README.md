@@ -17,3 +17,7 @@ Recommendation: Please use the small sequence for testing your program. When you
 Assume that the OS maximmally will allocate 10 page frames to each page-reference sequence, i.e., #PFRAME=10. Before you run your program on the provided sequence files, try your own examples with a small sequence to verify whether your strategy works correctly. You might also want to reduce the page frame to a smaller number (e.g., 5) for testing. See this page for testing.
 
 To run the sample random.c, type gcc random.c, and then ./a.out . 
+
+
+
+**For testing: ** http://students.calu.edu/calupa/chen/csc400/pa2/testing.html
