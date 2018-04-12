@@ -1,3 +1,5 @@
+// Replace the page that has been in the system the longest
+
 #include "stdio.h"
 #include "unistd.h"
 #include "time.h"
@@ -30,7 +32,7 @@ void load(int * mem, int page){
 		// Is current memory slot holding page?
 		if (mem[i] == -1) {
 			// If not, store this page
-			mem[i]=page;
+			mem[i] = page;
 			return;
 		}	
 }
@@ -49,6 +51,14 @@ void listmemory(int * mem){
 	return;
 }
 
+// First in First out page replacement
+void fifo_replace(int * mem, int page){
+	
+	for (i=0; i<PFRAME-1; i++){
+		mem[i] = mem[i+1];
+	}
+	mem[PFRAME-1] = page;
+}
 
 int main(int argc, char * argv[]){
 	int i, page, toreplace, pagefault = 0, totalpage = 0;
@@ -57,9 +67,9 @@ int main(int argc, char * argv[]){
 	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
 	
    // Memory starts out as list of -1
-    for (i=0;i<PFRAME; i++) memory[i] = -1;
+    for (i=0; i<PFRAME; i++) memory[i] = -1;
 	
-    for (i=0;i<20; i++) {
+    for (i=0; i<20; i++) {
 	  // Everytime read a page
 		page = pagereference[i];  
 		printf("%c", page);
@@ -71,10 +81,12 @@ int main(int argc, char * argv[]){
 			
 		  // Is memory full?
 			if (memory[PFRAME - 1] != -1) {	
-				toreplace = (int) ((float)random()/RAND_MAX*PFRAME);
-				printf("(M)   ->%d   ", toreplace + 1);
+				fifo_replace(memory, page);
+				
+				// toreplace = (int) ((float)random()/RAND_MAX*PFRAME);
+				// printf("(M)   ->%d   ", toreplace + 1);
 			  // Replace:
-				memory[toreplace] = page;
+				// memory[toreplace] = page;
 			}
 			
 			else 
