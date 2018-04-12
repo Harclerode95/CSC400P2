@@ -14,16 +14,20 @@ void Error(char * msg){
 }
 
 // Check if page is in memory ( 1 = yes, 0 = no )
-int pageinmem(int * mem, int page){
+int pageinmem(int * mem, int * intu, int page){
 	int i;
 	for (i=0; i<PFRAME; i++)
-		if (mem[i] == page) return 1;
-  
+		if (mem[i] == page){
+/*If already in memory reset Intuition*/
+			intu[i] = 0;
+/**************************************/
+			return 1;
+		}
 	return 0;
 }
 
 // Load page into memory
-void load(int * mem, int page){
+void load(int * mem, int * intu, int page){
 	int i;
 
 	for (i=0; i<PFRAME; i++)
@@ -31,6 +35,9 @@ void load(int * mem, int page){
 		if (mem[i] == -1) {
 			// If not, store this page
 			mem[i]=page;
+/*********Set intution*********/
+			intu[i]=0;
+/******************************/
 			return;
 		}	
 }
@@ -49,10 +56,40 @@ void listmemory(int * mem){
 	return;
 }
 
+//Update intuition array
+void update(int * intu){
+	int i;
+	
+	for(i=0;i<PFRAME;i++)
+		//increment intuition array
+		intu[i] += 1;
+	return;
+}
 
+int lru_replace(int * mem, int * intu){
+	int i;
+	//Initialize maximum element
+	int max = intu[0];
+	//Initialize max value location
+	int location = 0;
+	
+	for(i=1;i<PFRAME;i++)
+		if(intu[i] > max){
+			max = intu[i];
+			location = i;
+		}
+	
+	//Return the location of the page with the greatest Intuition
+	return location;
+	
+}
+	
 int main(int argc, char * argv[]){
 	int i, page, toreplace, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
+/*added intuition array parallel to memory*/
+	int intuition[PFRAME];
+/******************************************/
 	char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
 	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
 	
@@ -60,29 +97,39 @@ int main(int argc, char * argv[]){
     for (i=0;i<PFRAME; i++) memory[i] = -1;
 	
     for (i=0;i<20; i++) {
+	  //Call update for intuition queue
+	       update();
+	    
 	  // Everytime read a page
 		page = pagereference[i];  
 		printf("%c", page);
 		
 	  // Is the page in memory?
-		if (!pageinmem(memory, page)) {
+		if (!pageinmem(memory, intuition, page)) {
 		  // If not, update pagefault (number of faults)
 			pagefault++;
 			
 		  // Is memory full?
-			if (memory[PFRAME - 1] != -1) {	
-				toreplace = (int) ((float)random()/RAND_MAX*PFRAME);
+			if (memory[PFRAME - 1] != -1) {
+/*Call fn() to find page to replace*/
+				toreplace = lru_replace(memory, intuition);
+/***********************************/
 				printf("(M)   ->%d   ", toreplace + 1);
 			  // Replace:
 				memory[toreplace] = page;
+/***Reset intuition for new page***/
+				intuition[toreplace] = 0;
+/**********************************/
 			}
 			
 			else 
-				load(memory, page);
+				load(memory, intuition, page);
 				listmemory(memory);
 		}
 	  // Page exists
-		else printf("(H)\n");	
+		else
+		   printf("(H)\n");
+		   
 		}
 	
     printf("\n Total page fault rate is %f\n",(float)pagefault/20);
