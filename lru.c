@@ -98,7 +98,7 @@ int main(int argc, char * argv[]){
 	
     for (i=0;i<20; i++) {
 	  //Call update for intuition queue
-	       update();
+	       update(intuition);
 	    
 	  // Everytime read a page
 		page = pagereference[i];  
