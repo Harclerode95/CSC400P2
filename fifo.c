@@ -32,7 +32,7 @@ void load(int * mem, int page){
 		// Is current memory slot holding page?
 		if (mem[i] == -1) {
 			// If not, store this page
-			mem[i] = page;
+			mem[i]=page;
 			return;
 		}	
 }
@@ -60,6 +60,7 @@ void fifo_replace(int * mem, int page){
 	mem[PFRAME-1] = page;
 }
 
+
 int main(int argc, char * argv[]){
 	int i, page, toreplace, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
@@ -67,36 +68,31 @@ int main(int argc, char * argv[]){
 	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
 	
    // Memory starts out as list of -1
-    for (i=0; i<PFRAME; i++) memory[i] = -1;
+    for (i=0;i<PFRAME; i++) memory[i] = -1;
 	
-    for (i=0; i<20; i++) {
-	  // Everytime read a page
+    for (i=0;i<20; i++) {
+	  // Every time read a page
 		page = pagereference[i];  
 		printf("%c", page);
 		
 	  // Is the page in memory?
 		if (!pageinmem(memory, page)) {
 		  // If not, update pagefault (number of faults)
+			printf("(_)");
 			pagefault++;
 			
 		  // Is memory full?
-			if (memory[PFRAME - 1] != -1) {	
+			if (memory[PFRAME - 1] != -1)
 				fifo_replace(memory, page);
-				
-				// toreplace = (int) ((float)random()/RAND_MAX*PFRAME);
-				// printf("(M)   ->%d   ", toreplace + 1);
-			  // Replace:
-				// memory[toreplace] = page;
-			}
-			
-			else 
-				load(memory, page);
-				listmemory(memory);
+			else load(memory, page);	
 		}
 	  // Page exists
-		else printf("(H)\n");	
-		}
+		else printf("(+)");	
+	}
 	
+	// Always list memory
+	listmemory(memory);
+		
     printf("\n Total page fault rate is %f\n",(float)pagefault/20);
 
 	return 1;
