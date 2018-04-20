@@ -37,6 +37,44 @@ void load(int * mem, int page){
 		}	
 }
 
+// Replace the page that has been in the system the longest
+
+#include "stdio.h"
+#include "unistd.h"
+#include "time.h"
+#include <sys/ipc.h> 
+#include <sys/msg.h> 
+
+#define PFRAME 5
+//Assume that the program will be assigned 5 page frames
+
+void Error(char * msg){
+  printf("%s \n", msg);
+  exit(0);
+}
+
+// Check if page is in memory ( 1 = yes, 0 = no )
+int pageinmem(int * mem, int page){
+	int i;
+	for (i=0; i<PFRAME; i++)
+		if (mem[i] == page) return 1;
+  
+	return 0;
+}
+
+// Load page into memory
+void load(int * mem, int page){
+	int i;
+
+	for (i=0; i<PFRAME; i++)
+		// Is current memory slot holding page?
+		if (mem[i] == -1) {
+			// If not, store this page
+			mem[i]=page;
+			return;
+		}	
+}
+
 // List the memory
 void listmemory(int * mem){
 	int i;
@@ -53,6 +91,7 @@ void listmemory(int * mem){
 
 // First in First out page replacement
 void fifo_replace(int * mem, int page){
+	int i;
 	
 	for (i=0; i<PFRAME-1; i++){
 		mem[i] = mem[i+1];
@@ -60,17 +99,28 @@ void fifo_replace(int * mem, int page){
 	mem[PFRAME-1] = page;
 }
 
+// Get pagereferences from txt file 
+char* get_pages_from_file(char * filename){
+	char* buff;
+	FILE *page_file = fopen(filename,"r");
+	fscanf(page_file, "%s", buff);
+	return buff;
+}
 
+	
 int main(int argc, char * argv[]){
 	int i, page, toreplace, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
-	char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
+	char* pagereference;
+	//  char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
 	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
-	
+	if (argv[1] != NULL){
+		pagereference = get_pages_from_file(argv[1]);
+	}
    // Memory starts out as list of -1
-    for (i=0;i<PFRAME; i++) memory[i] = -1;
+    for (i=0;i<PFRAME;i++) memory[i] = -1;
 	
-    for (i=0;i<20; i++) {
+    for (i=0;i<sizeof pagereference;i++) {
 	  // Every time read a page
 		page = pagereference[i];  
 		printf("%c", page);
