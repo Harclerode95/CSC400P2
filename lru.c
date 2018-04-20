@@ -109,7 +109,7 @@ int main(int argc, char * argv[]){
     }
 
     // Get next page reference until EOF
-    while(fscanf(ftpr, "%i", page) != EOF)  {
+    while(fscanf(fptr, "%i", page) != EOF)  {
 	  //Call update for intuition queue
 	       update(intuition);
 	    
