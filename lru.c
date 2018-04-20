@@ -1,3 +1,6 @@
+
+/*All file operations reference to: https://www.programiz.com/c-programming/c-file-input-output */
+
 #include "stdio.h"
 #include "unistd.h"
 #include "time.h"
@@ -89,19 +92,29 @@ int main(int argc, char * argv[]){
 	int memory[PFRAME];
 /*added intuition array parallel to memory*/
 	int intuition[PFRAME];
+/*added file pointer to file***************/
+	FILE *fptr;
 /******************************************/
-	char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
-	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
+
 	
    // Memory starts out as list of -1
     for (i=0;i<PFRAME; i++) memory[i] = -1;
-	
-    for (i=0;i<20; i++) {
+
+   // Open file
+    if ((fptr = fopen(argv[1],"r")) == NULL){
+       printf("Error! opening file");
+
+       // Program exits if the file pointer returns NULL.
+       exit(1);
+    }
+
+    // Get next page reference until EOF
+    while(fscanf(ftpr, "%i", page) != EOF)  {
 	  //Call update for intuition queue
 	       update(intuition);
 	    
-	  // Everytime read a page
-		page = pagereference[i];  
+	  // Count a new page
+	    	totalpage += 1;
 		printf("%c", page);
 		
 	  // Is the page in memory?
@@ -132,8 +145,11 @@ int main(int argc, char * argv[]){
 		   
 		}
 	
-    printf("\n Total page fault rate is %f\n",(float)pagefault/20);
-
+    printf("\n Total page fault rate is %f\n",(float)pagefault/totalpage);
+ 
+    // Close the file
+    fclose(fptr);
+	
 	return 1;
 
 }
