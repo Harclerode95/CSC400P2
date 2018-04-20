@@ -56,6 +56,23 @@ void listmemory(int * mem){
 	return;
 }
 
+// File operations
+void create_bufffer(char *arg, int total, char[] &buff){
+
+    // Open file
+    if ((FILE *fptr = fopen(arg,"r")) == NULL){
+       printf("Error! opening file");
+
+       // Program exits if the file pointer returns NULL.
+       exit(1);
+    }
+	
+    // Create buffer
+
+    // Close file
+	fclose(fptr);
+}
+
 //Update intuition array
 void update(int * intu){
 	int i;
@@ -94,7 +111,10 @@ int main(int argc, char * argv[]){
 	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
 	
    // Memory starts out as list of -1
-    for (i=0;i<PFRAME; i++) memory[i] = -1;
+    for (i=0;i<PFRAME; i++) memory[i] = -1; 
+	
+   //file operations
+    create_buffer();
 	
     for (i=0;i<20; i++) {
 	  //Call update for intuition queue
