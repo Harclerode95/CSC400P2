@@ -1,0 +1,19 @@
+while(!EOF_FLAG)
+{
+  // reset memory
+  // temp = fgetc()
+  // while (temp != '\n' || temp != EOF)
+    {
+        page = temp;
+        other stuff
+        totalpage++
+        temp = fgetc()
+    }
+if (temp == '\n')
+  page fault
+else
+  eof_flag
+  
+end
+}
+  
