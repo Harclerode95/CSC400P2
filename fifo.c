@@ -64,7 +64,11 @@ void fifo_replace(int * mem, int page){
 // Get pagereferences from txt file 
 char* get_pages_from_file(char * filename){
 	char* buff;
-	FILE *page_file = fopen(filename,"r");
+	buff = malloc(sizeof(char) * 1000);
+	FILE *page_file;
+	if (fopen(filename,"r") == NULL){
+		printf("Error opening file");
+	}
 	fscanf(page_file, "%s", buff);
 	return buff;
 }
