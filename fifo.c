@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include "unistd.h"
 #include "time.h"
+#include <stdlib.h>
 #include <sys/ipc.h> 
 #include <sys/msg.h> 
 
