@@ -95,13 +95,13 @@ int main(int argc, char * argv[]){
 		fptr = fopen(argv[1],"r");
 	
 	// Handle each line of page references from file until EOF
-	while ((fgets(pagereference, MAXPAGES, (FILE*)fptr)) != -1){
+	while ((fgets(pagereference, MAXPAGES, fptr)) != -1){
 		
 		// Memory starts out as list of -1
 		for (i=0;i<PFRAME;i++) memory[i] = -1;
 		
 		i = 0;
-		while (pagereference[i] != "\n") { 
+		while (pagereference[i] != '\n' && pagereference[i] != 'EOF') { 
 			page = pagereference[i];  
 			printf("%c", page);
 			
@@ -118,9 +118,10 @@ int main(int argc, char * argv[]){
 					load(memory, page);	
 					listmemory(memory);
 				}
+			}	
 			// Page exists
 			else printf("(+)");
-			}
+			
 		
 		}
 	
