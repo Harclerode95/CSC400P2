@@ -78,10 +78,11 @@ char* get_pages_from_file(char * filename, char buff[]){
 	
 	
 int main(int argc, char * argv[]){
-	int i, page, pagefault = 0, totalpage = 0;
+	int i, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
 	char pagereference[MAXPAGES];
 	FILE *fptr;
+	char page;
 	
 	//  char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
 	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
