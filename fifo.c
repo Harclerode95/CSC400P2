@@ -3,45 +3,6 @@
 #include "stdio.h"
 #include "unistd.h"
 #include "time.h"
-#include "stdlib.h" //required for random()
-#include <sys/ipc.h> 
-#include <sys/msg.h> 
-
-#define PFRAME 5
-//Assume that the program will be assigned 5 page frames
-
-void Error(char * msg){
-  printf("%s \n", msg);
-  exit(0);
-}
-
-// Check if page is in memory ( 1 = yes, 0 = no )
-int pageinmem(int * mem, int page){
-	int i;
-	for (i=0; i<PFRAME; i++)
-		if (mem[i] == page) return 1;
-  
-	return 0;
-}
-
-// Load page into memory
-void load(int * mem, int page){
-	int i;
-
-	for (i=0; i<PFRAME; i++)
-		// Is current memory slot holding page?
-		if (mem[i] == -1) {
-			// If not, store this page
-			mem[i]=page;
-			return;
-		}	
-}
-
-// Replace the page that has been in the system the longest
-
-#include "stdio.h"
-#include "unistd.h"
-#include "time.h"
 #include <sys/ipc.h> 
 #include <sys/msg.h> 
 
