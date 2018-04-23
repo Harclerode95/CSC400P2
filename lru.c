@@ -14,8 +14,8 @@
 #include <sys/ipc.h> 
 #include <sys/msg.h> 
 
-#define PFRAME 5
-//Assume that the program will be assigned 5 page frames
+#define PFRAME 10 // 10 pages per frame
+
 
 void Error(char * msg){
   printf("%s \n", msg);
@@ -142,7 +142,7 @@ while(pagereference != EOF){
 /*Call fn() to find page to replace*/
 				toreplace = lru_replace(memory, intuition);
 /***********************************/
-				printf("(M)   ->%d   ", toreplace + 1);
+				printf("(M));
 			  // Replace:
 				memory[toreplace] = page;
 /***Reset intuition for new page***/
@@ -150,14 +150,17 @@ while(pagereference != EOF){
 /**********************************/
 			}
 			
-			else 
+			else {
+				printf("(M)");
 				load(memory, intuition, page);
-				listmemory(memory);
+				
 		}
 	  // Page exists
-		else
-		   printf("(H)\n");
+		else	
+			printf("(H)");
 
+	 // List the memory
+	       listmemory(memory);
 	 // Increment total page
 		totalpage += 1;	    	
 
@@ -172,7 +175,8 @@ while(pagereference != EOF){
 	printf("\nEnd of file found\n");
     }
     else{
-    	printf("\n Total page fault rate is %f\n\n",(float)pagefault/totalpage);
+	printf("\n Page Faults = %d , total pages = %d",pagefault,totalpage);    
+	printf("\n Total page fault rate is %f\n\n",(float)pagefault/totalpage);
     }
   }	
 	
