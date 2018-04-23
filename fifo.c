@@ -120,11 +120,13 @@ int main(int argc, char * argv[]){
 					fifo_replace(memory, page);
 				else{ 
 					load(memory, page);	
-					listmemory(memory);
 				}
 			}	
 			// Page exists
 			else printf("(+)");
+			
+			// List memory
+			listmemory(memory);
 			
 	 		// Increment total page
 			totalpage += 1;	    	
@@ -139,6 +141,7 @@ int main(int argc, char * argv[]){
 		printf("\nEnd of file found\n");
     	   }
     	   else{
+	   	printf("\n Page faults: %d Total pages: %d",pagefault,totalpages);
     		printf("\n Total page fault rate is %f\n\n",(float)pagefault/totalpage);
 	   }	
 	}
