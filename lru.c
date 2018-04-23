@@ -1,3 +1,12 @@
+// Catriona Reynolds  rey9672@calu.edu
+// Tyler Harclerode   har9688@calu.edu
+// CSC 400 - Operating Systems
+// Least-Recently-Used Programming Assignment 2
+// Last Updated: 4/22/2018
+// Compilation Instruction:	gcc lru.c -o lru
+// Execution Instruction:	./lru samplefile.txt
+// Note: samplefile.txt must exhist in current directory
+
 #include "stdio.h"
 #include "unistd.h"
 #include "time.h"
