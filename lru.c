@@ -117,8 +117,9 @@ while(pagereference != EOF){
    // Memory starts out as list of -1
     for (i=0;i<PFRAME; i++) memory[i] = -1; 
 
-   // Reset total pages
+   // Reset totalpage & pagefault
     totalpage = 0;
+    pagefault = 0;
 
    // Read the first char
     pagereference = fgetc(fptr);
