@@ -1,4 +1,11 @@
-// Replace the page that has been in the system the longest
+// Catriona Reynolds  rey9672@calu.edu
+// Tyler Harclerode   har9688@calu.edu
+// CSC 400 - Operating Systems
+// First-In-First-Out Programming Assignment 2
+// Last Updated: 4/22/2018
+// Compilation Instruction:	gcc fifo.c -o fifo
+// Execution Instruction:	./fifo samplefile.txt
+// Note: samplefile.txt must exhist in current directory
 
 #include "stdio.h"
 #include "unistd.h"
@@ -78,32 +85,40 @@ char* get_pages_from_file(char * filename, char buff[]){
 	
 	
 int main(int argc, char * argv[]){
-	int i, pagefault = 0, totalpage = 0;
+	int i, pagefault = 0, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
-	char pagereference[MAXPAGES];
-	FILE *fptr;
+
 	char page;
+	int eof = 0;
+	FILE *fptr;
 	
-	//  char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
-	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
+// Open file
+	fptr = fopen(argv[1],"r");
+	if(fptr == NULL) {
+	   perror("ERROR opening file");
+	   return(-1);
+	}
+
 	
-	// if (argv[1] != NULL){
-		// char pagereference[] = get_pages_from_file(argv[1],buffer[]);
-	//}
-	
-	if (argv[1] != NULL)
-		fptr = fopen(argv[1],"r");
-	
-	// Handle each line of page references from file until EOF
-	while ((fgets(pagereference, MAXPAGES, fptr)) != -1){
+// While not the end of file
+	while(pagereference != EOF){
+
 		
 		// Memory starts out as list of -1
 		for (i=0;i<PFRAME;i++) memory[i] = -1;
 		
-		i = 0;
-		while (pagereference[i] != '\n' && pagereference[i] != 'EOF') { 
-			page = pagereference[i];  
+ 		// Reset total pages
+    		totalpage = 0;
+
+   		// Read the first char
+    		pagereference = fgetc(fptr);
+	
+	
+    		while (pagereference != '\n' && pagereference != EOF) {
+	  		// Transfer page
+			page = pagereference;  
 			printf("%c", page);
+
 			
 			// Is the page in memory?
 			if (!pageinmem(memory, page)) {
@@ -122,12 +137,24 @@ int main(int argc, char * argv[]){
 			// Page exists
 			else printf("(+)");
 			
-		
+	 		// Increment total page
+			totalpage += 1;	    	
+
+	 		// Get next char
+	    		pagereference = fgetc(fptr);
 		}
 	
-	printf("\n Total page fault rate is %f\n",(float)pagefault/20);		
+   	   // Check for end of file		
+    	   if(pagereference == EOF){
+		eof = 1;
+		printf("\nEnd of file found\n");
+    	   }
+    	   else{
+    		printf("\n Total page fault rate is %f\n\n",(float)pagefault/totalpage);
+	   }	
 	}
 	
+	fclose(fptr);
 	return 1;
 
 }
