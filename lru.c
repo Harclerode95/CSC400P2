@@ -91,30 +91,37 @@ int main(int argc, char * argv[]){
 	int intuition[PFRAME];
 /******************************************/
 	char page, pagereference;
-	bool eof = false;
+	int eof = 0;
 	FILE *fptr;
 	
 // Open file
-	ftpr = fopen(argv[1],"r");
-
+	fptr = fopen(argv[1],"r");
+	if(fptr == NULL) {
+	   perror("ERROR opening file");
+	   return(-1);
+	}
 
 	
 // While not the end of file
-while(!eof){
+while(pagereference != EOF){
 
    // Memory starts out as list of -1
     for (i=0;i<PFRAME; i++) memory[i] = -1; 
 
+   // Reset total pages
+    totalpage = 0;
+
    // Read the first char
-    pagereference = fgetc(fptr);	
+    pagereference = fgetc(fptr);
 	
-    while (pagereference != '/n' && pagereference != EOF) {
-	  //Call update for intuition queue
-	       update(intuition);
-	    
+	
+    while (pagereference != '\n' && pagereference != EOF) {
 	  // Transfer page
 		page = pagereference;  
 		printf("%c", page);
+
+	  //Call update for intuition queue
+	       update(intuition);
 		
 	  // Is the page in memory?
 		if (!pageinmem(memory, intuition, page)) {
@@ -141,17 +148,26 @@ while(!eof){
 	  // Page exists
 		else
 		   printf("(H)\n");
-	    
+
+	 // Increment total page
+		totalpage += 1;	    	
+
 	 // Get next char
 	    	pagereference = fgetc(fptr);
-		}
+		
+	}
 	
-    	printf("\n Total page fault rate is %f\n",(float)pagefault/20);
-
-	if(pagereference = EOF)
-		eof = true;
-
-}
+   // Check for end of file		
+    if(pagereference == EOF){
+	eof = 1;
+	printf("\nEnd of file found\n");
+    }
+    else{
+    	printf("\n Total page fault rate is %f\n\n",(float)pagefault/totalpage);
+    }
+  }	
+	
+	fclose(fptr);
 	return 1;
 
 }
