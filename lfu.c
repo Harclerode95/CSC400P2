@@ -5,8 +5,8 @@
 #include <sys/ipc.h> 
 #include <sys/msg.h> 
 
-#define PFRAME 5
-//Assume that the program will be assigned 5 page frames
+#define PFRAME 10
+//Assume that the program will be assigned 10 page frames
 
 void Error(char * msg){
   printf("%s \n", msg);
@@ -28,7 +28,7 @@ int pageinmem(int * mem, int * intu, int page){
 }
 
 // Load page into memory
-void load(int * mem, int * intu int page){
+void load(int * mem, int * intu, int page){
 	int i;
 
 	for (i=0; i<PFRAME; i++)
