@@ -123,13 +123,13 @@ while(pagereference != EOF){
 		if (!pageinmem(memory, intuition, page)) {
 		  // If not, update pagefault (number of faults)
 			pagefault++;
-			
+			printf("(M)");
 		  // Is memory full?
 			if (memory[PFRAME - 1] != -1) {	
 /*Call fn() to find page to replace*/        
 				toreplace = lfu_replace(memory, intuition);
 /***********************************/
-				printf("(M)   ->%d   ", toreplace + 1);
+				
 			  // Replace:
 				memory[toreplace] = page;
 /***Reset intuition for new page***/
@@ -139,11 +139,13 @@ while(pagereference != EOF){
 			
 			else 
 				load(memory, intuition, page);
-				listmemory(memory);
+				
 		}
 	  // Page exists
 		else printf("(H)\n");	
 	    
+	 // List memory
+	    	listmemory(memory);
 	 // Increment total page
 		totalpage += 1;	    	
 
@@ -158,6 +160,7 @@ while(pagereference != EOF){
 	printf("\nEnd of file found\n");
     }
     else{
+	printf("\n Page faults: %d Total pages: %d ",pagefault,totalpage);  
     	printf("\n Total page fault rate is %f\n\n",(float)pagefault/totalpage);
 	}
   }
