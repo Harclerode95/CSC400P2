@@ -56,23 +56,6 @@ void listmemory(int * mem){
 	return;
 }
 
-// File operations
-void create_bufffer(char *arg, int total, char[] &buff){
-
-    // Open file
-    if ((FILE *fptr = fopen(arg,"r")) == NULL){
-       printf("Error! opening file");
-
-       // Program exits if the file pointer returns NULL.
-       exit(1);
-    }
-	
-    // Create buffer
-
-    // Close file
-	fclose(fptr);
-}
-
 //Update intuition array
 void update(int * intu){
 	int i;
@@ -102,26 +85,35 @@ int lru_replace(int * mem, int * intu){
 }
 	
 int main(int argc, char * argv[]){
-	int i, page, toreplace, pagefault = 0, totalpage = 0;
+	int i, toreplace, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
 /*added intuition array parallel to memory*/
 	int intuition[PFRAME];
 /******************************************/
-	char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
-	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
+	char page, pagereference;
+	bool eof = false;
+	FILE *fptr;
 	
+// Open file
+	ftpr = fopen(argv[1],"r");
+
+
+	
+// While not the end of file
+while(!eof){
+
    // Memory starts out as list of -1
     for (i=0;i<PFRAME; i++) memory[i] = -1; 
+
+   // Read the first char
+    pagereference = fgetc(fptr);	
 	
-   //file operations
-    create_buffer();
-	
-    for (i=0;i<20; i++) {
+    while (pagereference != '/n' && pagereference != EOF) {
 	  //Call update for intuition queue
 	       update(intuition);
 	    
-	  // Everytime read a page
-		page = pagereference[i];  
+	  // Transfer page
+		page = pagereference;  
 		printf("%c", page);
 		
 	  // Is the page in memory?
@@ -149,11 +141,17 @@ int main(int argc, char * argv[]){
 	  // Page exists
 		else
 		   printf("(H)\n");
-		   
+	    
+	 // Get next char
+	    	pagereference = fgetc(fptr);
 		}
 	
-    printf("\n Total page fault rate is %f\n",(float)pagefault/20);
+    	printf("\n Total page fault rate is %f\n",(float)pagefault/20);
 
+	if(pagereference = EOF)
+		eof = true;
+
+}
 	return 1;
 
 }
