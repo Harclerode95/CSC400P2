@@ -1,3 +1,12 @@
+// Catriona Reynolds  rey9672@calu.edu
+// Tyler Harclerode   har9688@calu.edu
+// CSC 400 - Operating Systems
+// Least-Frequently-Used Programming Assignment 2
+// Last Updated: 4/22/2018
+// Compilation Instruction:	gcc lfu.c -o lfu
+// Execution Instruction:	./lfu samplefile.txt
+// Note: samplefile.txt must exhist in current directory
+
 #include "stdio.h"
 #include "unistd.h"
 #include "time.h"
@@ -71,26 +80,42 @@ int lfu_replace(int * mem, int * intu){
 		}
 	
 	//Return the location of the page with the greatest Intuition
-return location;
-  
-  return location;
+	return location;
+	
 }
 
 int main(int argc, char * argv[]){
-	int i, page, toreplace, pagefault = 0, totalpage = 0;
+	int i, toreplace, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
 /*added intuition array parallel to memory*/
 	int intuition[PFRAME];
 /******************************************/
-	char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
-	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
+	char page, pagereference;
+	int eof = 0;
+	FILE *fptr;
 	
+// Open file
+	fptr = fopen(argv[1],"r");
+	if(fptr == NULL) {
+	   perror("ERROR opening file");
+	   return(-1);
+	}
+	
+while(pagereference != EOF){
+
    // Memory starts out as list of -1
     for (i=0;i<PFRAME; i++) memory[i] = -1;
+
+   // Reset total pages
+    totalpage = 0;
+
+   // Read the first char
+    pagereference = fgetc(fptr);
 	
-    for (i=0;i<20; i++) {
-	  // Everytime read a page
-		page = pagereference[i];  
+	
+    while (pagereference != '\n' && pagereference != EOF) {
+	  // Transfer page
+		page = pagereference; 	
 		printf("%c", page);
 		
 	  // Is the page in memory?
@@ -117,10 +142,26 @@ int main(int argc, char * argv[]){
 		}
 	  // Page exists
 		else printf("(H)\n");	
+	    
+	 // Increment total page
+		totalpage += 1;	    	
+
+	 // Get next char
+	    	pagereference = fgetc(fptr);
+
 		}
 	
-    printf("\n Total page fault rate is %f\n",(float)pagefault/20);
-
+   // Check for end of file		
+    if(pagereference == EOF){
+	eof = 1;
+	printf("\nEnd of file found\n");
+    }
+    else{
+    	printf("\n Total page fault rate is %f\n\n",(float)pagefault/totalpage);
+	}
+  }
+	
+	fclose(fptr);
 	return 1;
 
 }
