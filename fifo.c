@@ -1,4 +1,11 @@
-// Replace the page that has been in the system the longest
+// Catriona Reynolds  rey9672@calu.edu
+// Tyler Harclerode   har9688@calu.edu
+// CSC 400 - Operating Systems
+// First-In-First-Out Programming Assignment 2
+// Last Updated: 4/22/2018
+// Compilation Instruction:	gcc fifo.c -o fifo
+// Execution Instruction:	./fifo samplefile.txt
+// Note: samplefile.txt must exhist in current directory
 
 #include "stdio.h"
 #include "unistd.h"
@@ -7,7 +14,8 @@
 #include <sys/ipc.h> 
 #include <sys/msg.h> 
 
-#define PFRAME 5
+#define PFRAME 10
+#define MAXPAGES 1000
 //Assume that the program will be assigned 5 page frames
 
 void Error(char * msg){
@@ -58,59 +66,87 @@ void fifo_replace(int * mem, int page){
 	for (i=0; i<PFRAME-1; i++){
 		mem[i] = mem[i+1];
 	}
+	
+	// Newest page always placed in end
 	mem[PFRAME-1] = page;
 }
-
-// Get pagereferences from txt file 
-char* get_pages_from_file(char * filename){
-	char* buff;
-	buff = malloc(sizeof(char) * 1000);
-	FILE *page_file;
-	if (fopen(filename,"r") == NULL){
-		printf("Error opening file");
-	}
-	fscanf(page_file, "%s", buff);
-	return buff;
-}
-
+	
 	
 int main(int argc, char * argv[]){
-	int i, page, toreplace, pagefault = 0, totalpage = 0;
+	int i, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
-	char* pagereference;
-	//  char pagereference[21]="ABCDEEDBCFJKMCBFFCMA";
-	//  char pagereference[21]="ABCDEFGHIJKLMNOPQRST";
-	if (argv[1] != NULL){
-		pagereference = get_pages_from_file(argv[1]);
-	}
-   // Memory starts out as list of -1
-    for (i=0;i<PFRAME;i++) memory[i] = -1;
-	
-    for (i=0;i<sizeof pagereference;i++) {
-	  // Every time read a page
-		page = pagereference[i];  
-		printf("%c", page);
-		
-	  // Is the page in memory?
-		if (!pageinmem(memory, page)) {
-		  // If not, update pagefault (number of faults)
-			printf("(_)");
-			pagefault++;
-			
-		  // Is memory full?
-			if (memory[PFRAME - 1] != -1)
-				fifo_replace(memory, page);
-			else load(memory, page);	
-		}
-	  // Page exists
-		else printf("(+)");	
-	}
-	
-	// Always list memory
-	listmemory(memory);
-		
-    printf("\n Total page fault rate is %f\n",(float)pagefault/20);
 
+	char page, pagereference;
+	int eof = 0;
+	FILE *fptr;
+	
+// Open file
+	fptr = fopen(argv[1],"r");
+	if(fptr == NULL) {
+	   perror("ERROR opening file");
+	   return(-1);
+	}
+
+	
+// While not the end of file
+	while(pagereference != EOF){
+
+		
+		// Memory starts out as list of -1
+		for (i=0;i<PFRAME;i++) memory[i] = -1;
+		
+ 		// Reset totalpage and pagefault
+    		totalpage = 0;
+		pagefault = 0;
+
+   		// Read the first char
+    		pagereference = fgetc(fptr);
+	
+	
+    		while (pagereference != '\n' && pagereference != EOF) {
+	  		// Transfer page
+			page = pagereference;  
+			printf("%c", page);
+
+			
+			// Is the page in memory?
+			if (!pageinmem(memory, page)) {
+				// If not, update pagefault (number of faults)
+				printf("(_)");
+				pagefault++;
+			
+				// Is memory full?
+				if (memory[PFRAME - 1] != -1)
+					fifo_replace(memory, page);
+				else{ 
+					load(memory, page);	
+				}
+			}	
+			// Page exists
+			else printf("(+)");
+			
+			// List memory
+			listmemory(memory);
+			
+	 		// Increment total page
+			totalpage += 1;	    	
+
+	 		// Get next char
+	    		pagereference = fgetc(fptr);
+		}
+	
+   	   // Check for end of file		
+    	   if(pagereference == EOF){
+		eof = 1;
+		printf("\nEnd of file found\n");
+    	   }
+    	   else{
+	   	printf("\n Page faults: %d Total pages: %d",pagefault,totalpage);
+    		printf("\n Total page fault rate is %f\n\n",(float)pagefault/totalpage);
+	   }	
+	}
+	
+	fclose(fptr);
 	return 1;
 
 }
