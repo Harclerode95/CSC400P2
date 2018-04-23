@@ -70,25 +70,13 @@ void fifo_replace(int * mem, int page){
 	// Newest page always placed in end
 	mem[PFRAME-1] = page;
 }
-
-/* Get pagereferences from txt file 
-char* get_pages_from_file(char * filename, char buff[]){
-	//buff = malloc(sizeof(char) * 1000);
-	FILE *page_file;
-	if ((page_file = fopen(filename,"r")) == NULL){
-		printf("Error opening file");
-	}
-	fscanf(page_file, "%s", buff[]);
-	return buff;
-}
-*/
 	
 	
 int main(int argc, char * argv[]){
-	int i, pagefault = 0, pagefault = 0, totalpage = 0;
+	int i, pagefault = 0, totalpage = 0;
 	int memory[PFRAME];
 
-	char page;
+	char page, pagereference;
 	int eof = 0;
 	FILE *fptr;
 	
@@ -107,8 +95,9 @@ int main(int argc, char * argv[]){
 		// Memory starts out as list of -1
 		for (i=0;i<PFRAME;i++) memory[i] = -1;
 		
- 		// Reset total pages
+ 		// Reset totalpage and pagefault
     		totalpage = 0;
+		pagefault = 0;
 
    		// Read the first char
     		pagereference = fgetc(fptr);
